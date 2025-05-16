@@ -1,6 +1,6 @@
 implementation:
 
-<script async src="https://cdn.jsdelivr.net/gh/mhensberg2003/vocatawidget/widget.js"></script>
+<script async src="https://cdn.jsdelivr.net/gh/mhensberg2003/vocatawidget@latest/widget.js"></script>
     <script>
       // Initialize with just the chatbot ID and API endpoint
       window.AIChatWidget.init({
