@@ -14,6 +14,7 @@
     primary_color: '#0070f3',
     bubbleSize: '60px',
     logo_url: null, // Add logo URL to default config
+    widget_logo: null, // Add widget logo for the chat bubble logo
   };
 
   // Create global widget namespace
@@ -247,7 +248,13 @@
       const bubble = document.createElement('div');
       bubble.id = 'ai-chat-bubble';
       bubble.className = 'ai-chat-widget-bubble';
-      bubble.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+      
+      // Use widget_logo for the bubble logo if available, otherwise use default chat icon
+      if (finalConfig.widget_logo) {
+        bubble.innerHTML = `<img src="${finalConfig.widget_logo}" alt="Chat" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+      } else {
+        bubble.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+      }
       
       // Style chat bubble
       bubble.style.width = finalConfig.bubbleSize;
@@ -637,8 +644,12 @@
           chatWindow.style.display = 'none';
         }, 300);
         
-        // Change X icon back to chat bubble with animation
-        bubble.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+        // Change X icon back to chat bubble or custom logo with animation
+        if (finalConfig.widget_logo) {
+          bubble.innerHTML = `<img src="${finalConfig.widget_logo}" alt="Chat" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+        } else {
+          bubble.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>';
+        }
         bubble.style.transform = 'rotate(0deg)';
       }
       
