@@ -1,0 +1,10 @@
+implementation:
+
+<script src="https://cdn.jsdelivr.net/gh/mhensberg2003/vocatawidget/widget.js"></script>
+    <script>
+      // Initialize with just the chatbot ID and API endpoint
+      window.AIChatWidget.init({
+        chatbotId: 10,
+        apiEndpoint: "https://vocata-ai-backend.up.railway.app"
+      });
+    </script>
