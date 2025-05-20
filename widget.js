@@ -15,6 +15,7 @@
     bubbleSize: '60px',
     logo_url: null, // Add logo URL to default config
     widget_logo: null, // Add widget logo for the chat bubble logo
+    enableMarkdown: true, // Enable markdown support by default
   };
 
   // Create global widget namespace
@@ -225,6 +226,115 @@
           100% {
             left: 100%;
           }
+        }
+
+        /* Markdown Styles */
+        .ai-chat-markdown {
+          line-height: 1.6;
+        }
+
+        .ai-chat-markdown p {
+          margin: 0 0 1em 0;
+        }
+
+        .ai-chat-markdown p:last-child {
+          margin-bottom: 0;
+        }
+
+        .ai-chat-markdown h1,
+        .ai-chat-markdown h2,
+        .ai-chat-markdown h3,
+        .ai-chat-markdown h4,
+        .ai-chat-markdown h5,
+        .ai-chat-markdown h6 {
+          margin: 1em 0 0.5em 0;
+          font-weight: 600;
+          line-height: 1.25;
+        }
+
+        .ai-chat-markdown h1 { font-size: 1.5em; }
+        .ai-chat-markdown h2 { font-size: 1.3em; }
+        .ai-chat-markdown h3 { font-size: 1.2em; }
+        .ai-chat-markdown h4 { font-size: 1.1em; }
+        .ai-chat-markdown h5 { font-size: 1em; }
+        .ai-chat-markdown h6 { font-size: 0.9em; }
+
+        .ai-chat-markdown code {
+          background-color: rgba(0, 0, 0, 0.1);
+          padding: 0.2em 0.4em;
+          border-radius: 3px;
+          font-family: monospace;
+          font-size: 0.9em;
+        }
+
+        .ai-chat-markdown pre {
+          background-color: rgba(0, 0, 0, 0.1);
+          padding: 1em;
+          border-radius: 5px;
+          overflow-x: auto;
+          margin: 1em 0;
+        }
+
+        .ai-chat-markdown pre code {
+          background-color: transparent;
+          padding: 0;
+          border-radius: 0;
+        }
+
+        .ai-chat-markdown blockquote {
+          border-left: 4px solid rgba(0, 0, 0, 0.1);
+          margin: 1em 0;
+          padding: 0.5em 0 0.5em 1em;
+          color: rgba(0, 0, 0, 0.7);
+        }
+
+        .ai-chat-markdown ul,
+        .ai-chat-markdown ol {
+          margin: 1em 0;
+          padding-left: 2em;
+        }
+
+        .ai-chat-markdown li {
+          margin: 0.5em 0;
+        }
+
+        .ai-chat-markdown a {
+          color: ${finalConfig.primary_color};
+          text-decoration: none;
+        }
+
+        .ai-chat-markdown a:hover {
+          text-decoration: underline;
+        }
+
+        .ai-chat-markdown img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 5px;
+          margin: 1em 0;
+        }
+
+        .ai-chat-markdown table {
+          border-collapse: collapse;
+          width: 100%;
+          margin: 1em 0;
+        }
+
+        .ai-chat-markdown th,
+        .ai-chat-markdown td {
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          padding: 0.5em;
+          text-align: left;
+        }
+
+        .ai-chat-markdown th {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .ai-chat-markdown hr {
+          border: none;
+          border-top: 1px solid rgba(0, 0, 0, 0.1);
+          margin: 1em 0;
         }
       `;
       document.head.appendChild(styleEl);
@@ -483,7 +593,7 @@
         }
       }
       
-      // Add message to chat with improved scrolling
+      // Add message to chat with improved scrolling and markdown support
       function addMessage(text, sender, sources = []) {
         const messageElement = document.createElement('div');
         messageElement.className = 'ai-chat-widget-message';
@@ -520,8 +630,26 @@
           messageContent.style.color = '#1f2937';
           messageContent.style.borderBottomLeftRadius = '4px';
         }
+
+        // Add markdown support for bot messages
+        if (sender === 'bot' && finalConfig.enableMarkdown) {
+          // Load marked library if not already loaded
+          if (!window.marked) {
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
+            script.onload = () => {
+              messageContent.innerHTML = marked.parse(text);
+              messageContent.classList.add('ai-chat-markdown');
+            };
+            document.head.appendChild(script);
+          } else {
+            messageContent.innerHTML = marked.parse(text);
+            messageContent.classList.add('ai-chat-markdown');
+          }
+        } else {
+          messageContent.textContent = text;
+        }
         
-        messageContent.textContent = text;
         messageElement.appendChild(messageContent);
         
         // Add message and scroll to bottom
