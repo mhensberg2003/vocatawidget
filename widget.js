@@ -87,13 +87,18 @@
     // Fetch the full configuration from the server
     const configUrl = `${config.apiEndpoint}/chatbots/${config.chatbotId}/widget-config`;
     
-    fetch(configUrl)
+    fetch(configUrl, {
+      headers: {
+        'X-Client-Key': config.clientApiKey || ''
+      }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error(`Failed to load chatbot config: ${response.status}`);
         }
         return response.json();
       })
+      
       .then(serverConfig => {
         // Remove loading indicator
         container.removeChild(loadingBubble);
@@ -701,7 +706,7 @@
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': finalConfig.apiKey ? `Bearer ${finalConfig.apiKey}` : ''
+            'X-Client-Key': finalConfig.clientApiKey || ''
           },
           body: JSON.stringify(requestData)
         })
