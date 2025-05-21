@@ -896,7 +896,7 @@
       poweredByLabel.style.color = '#9ca3af';
       poweredByLabel.style.opacity = '0.7';
       poweredByLabel.style.paddingBottom = '4px';
-      poweredByLabel.textContent = '⚡ Powered by vocata';
+      poweredByLabel.textContent = '⚡ Drevet af vocata.ai';
       
       // Add the powered by label to the input container
       inputContainer.appendChild(poweredByLabel);
